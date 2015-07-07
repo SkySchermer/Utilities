@@ -104,20 +104,20 @@ public class Color implements Serializable {
 	private static final int ENCODING_RED_BIT_MASK = COMPONENT_BIT_MASK << ENCODING_RED_OFFSET;
 	private static final int ENCODING_BLUE_BIT_MASK = COMPONENT_BIT_MASK << ENCODING_BLUE_OFFSET;
 	private static final int ENCODING_GREEN_BIT_MASK = COMPONENT_BIT_MASK << ENCODING_GREEN_OFFSET;
-	private static final int ENCODING_RGB_BIT_MASK = ENCODING_RED_BIT_MASK | 
-													 ENCODING_GREEN_BIT_MASK | 
+	private static final int ENCODING_RGB_BIT_MASK = ENCODING_RED_BIT_MASK |
+													 ENCODING_GREEN_BIT_MASK |
 													 ENCODING_BLUE_BIT_MASK;
 
 	/** Function for computing the distance between two colors in RGB space. */
 	public static final ToDoubleBiFunction<Color, Color> RGB_DISTANCE_FUNCTION = (a, b) -> {
 		return a.hslDistanceTo(b);
 	};
-	
+
 	/** Function for computing the distance between two colors in HSL space. */
 	public static final ToDoubleBiFunction<Color, Color> HSL_DISTANCE_FUNCTION = (a, b) -> {
 		return a.hslDistanceTo(b);
 	};
-	
+
 	// Static Fields =========================================================
 	private static ColorNameSource colorNameSource = null;
 	private static String colorNameFile = ColorNameSource.DEFAULT_COLOR_NAME_FILE;
@@ -210,10 +210,6 @@ public class Color implements Serializable {
 	 */
 	public static Color fromRgbOctet(int red, int green, int blue) {
 		// @formatter:off
-		red   = clamp(red,   0, 255);
-		green = clamp(green, 0, 255);
-		blue  = clamp(blue,  0, 255);
-		
 		return Color.fromRgb((float) red   / 255,
 		                     (float) green / 255,
 		                     (float) blue  / 255);
@@ -259,10 +255,6 @@ public class Color implements Serializable {
 	 */
 	public static Color fromRgbPercent(int red, int green, int blue) {
 		// @formatter:off
-		red   = clamp(red,   0, 100);
-		green = clamp(green, 0, 100);
-		blue  = clamp(blue,  0, 100);
-		
 		return Color.fromRgb((float) red   / 100,
 		                     (float) green / 100,
 		                     (float) blue  / 100);
@@ -389,10 +381,6 @@ public class Color implements Serializable {
 	 */
 	public static Color fromHslPercent(float hue, int saturation, int lightness) {
 		// @formatter:off
-		hue        = hue % 100;
-		saturation = clamp(saturation, 0, 100);
-		lightness  = clamp(lightness,  0, 100);
-		
 		return Color.fromHsl((float) hue        * 3.6f, 
 		                     (float) saturation / 100, 
 		                     (float) lightness  / 100);
@@ -444,11 +432,6 @@ public class Color implements Serializable {
 	 */
 	public static Color fromCmykPercent(int cyan, int magenta, int yellow, int key) {
 		// @formatter:off
-		cyan    = clamp(cyan,    0, 100);
-		magenta = clamp(magenta, 0, 100);
-		yellow  = clamp(yellow,  0, 100);
-		key     = clamp(key,     0, 100);
-		
 		return Color.fromCmyk((float) cyan    / 100, 
 		                      (float) magenta / 100, 
 		                      (float) yellow  / 100, 
@@ -494,7 +477,7 @@ public class Color implements Serializable {
 	public int getRgbHex() {
 		return srgbEncoding & ENCODING_RGB_BIT_MASK;
 	}
-	
+
 
 	/**
 	 * Returns the 8 bit red component of the color.
@@ -788,7 +771,7 @@ public class Color implements Serializable {
 	public Vector3f asRgbVector() {
 		return Vector3f.rectangular(getRed(), getGreen(), getBlue());
 	}
-	
+
 	/**
 	 * Returns the color as an RGB array.
 	 * 
