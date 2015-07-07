@@ -30,6 +30,7 @@ import static schermer.Utility.maxOf;
 import static schermer.Utility.minOf;
 
 import java.io.Serializable;
+import java.util.function.ToDoubleBiFunction;
 import java.util.regex.Pattern;
 
 import schermer.UnreachableCodeException;
@@ -107,7 +108,16 @@ public class Color implements Serializable {
 													 ENCODING_GREEN_BIT_MASK | 
 													 ENCODING_BLUE_BIT_MASK;
 
-
+	/** Function for computing the distance between two colors in RGB space. */
+	public static final ToDoubleBiFunction<Color, Color> RGB_DISTANCE_FUNCTION = (a, b) -> {
+		return a.hslDistanceTo(b);
+	};
+	
+	/** Function for computing the distance between two colors in HSL space. */
+	public static final ToDoubleBiFunction<Color, Color> HSL_DISTANCE_FUNCTION = (a, b) -> {
+		return a.hslDistanceTo(b);
+	};
+	
 	// Static Fields =========================================================
 	private static ColorNameSource colorNameSource = null;
 	private static String colorNameFile = ColorNameSource.DEFAULT_COLOR_NAME_FILE;
