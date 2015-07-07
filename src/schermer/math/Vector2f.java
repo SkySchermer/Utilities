@@ -282,8 +282,7 @@ public final class Vector2f implements Serializable {
 	}
 
 	/**
-	 * Returns the vector produced by rotating the given vector by the given
-	 * angle.
+	 * Returns the vector produced by rotating the vector by the given angle.
 	 * 
 	 * @param angle
 	 *        the angle of the rotation in radians
@@ -353,8 +352,8 @@ public final class Vector2f implements Serializable {
 	 */
 	public Quadrant quadrant() {
 		for (Quadrant q : Quadrant.values()) {
-			if (Math.signum(x) != Math.signum(q.signVector.x)) continue;
-			if (Math.signum(y) != Math.signum(q.signVector.y)) continue;
+			if (Math.signum(x) != Math.signum(q.signVector.x) ||
+				Math.signum(y) != Math.signum(q.signVector.y)) continue;
 			return q;
 		}
 		return null;

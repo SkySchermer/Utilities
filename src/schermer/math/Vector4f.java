@@ -428,10 +428,10 @@ public final class Vector4f implements Serializable {
 	 */
 	public Hyperoctant hyperoctant() {
 		for (Hyperoctant o : Hyperoctant.values()) {
-			if (Math.signum(x) != Math.signum(o.signVector.x)) continue;
-			if (Math.signum(y) != Math.signum(o.signVector.y)) continue;
-			if (Math.signum(z) != Math.signum(o.signVector.z)) continue;
-			if (Math.signum(w) != Math.signum(o.signVector.w)) continue;
+			if (Math.signum(x) != Math.signum(o.signVector.x) ||
+				Math.signum(y) != Math.signum(o.signVector.y) ||
+				Math.signum(z) != Math.signum(o.signVector.z) ||
+				Math.signum(w) != Math.signum(o.signVector.w)) continue;
 			return o;
 		}
 		return null;

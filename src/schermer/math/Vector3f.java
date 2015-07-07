@@ -371,8 +371,8 @@ public final class Vector3f implements Serializable {
 	}
 
 	/**
-	 * Returns the vector produced by rotating the given vector about the given
-	 * axis by the given angle.
+	 * Returns the vector produced by rotating the vector about the given axis
+	 * by the given angle.
 	 * 
 	 * @param axis
 	 *        the axis of rotation
@@ -387,7 +387,7 @@ public final class Vector3f implements Serializable {
 	}
 
 	/**
-	 * Returns the vector produced by rotating the given vector using the given
+	 * Returns the vector produced by rotating the vector using the given
 	 * rotation quaternion.
 	 * 
 	 * @param rotation
@@ -407,11 +407,13 @@ public final class Vector3f implements Serializable {
 	 * @return the normalized vector
 	 */
 	public Vector3f normalized() {
-		if (this.equals(ZERO))
-							  throw new UnsupportedOperationException("Normalized zero vector is undefined.");
+		// @formatter:off
+		if (this.equals(ZERO)) 
+			throw new UnsupportedOperationException("Normalized zero vector is undefined.");
 
-		if (Float.isInfinite(this.magnitude()))
-											   throw new UnsupportedOperationException("Normalized vector of infinite magnitude is undefined.");
+		if (Float.isInfinite(this.magnitude())) 
+			throw new UnsupportedOperationException("Normalized vector of infinite magnitude is undefined.");
+		// @formatter:on
 
 		return this.divide(this.magnitude());
 	}
@@ -461,9 +463,9 @@ public final class Vector3f implements Serializable {
 	 */
 	public Octant octant() {
 		for (Octant o : Octant.values()) {
-			if (Math.signum(x) != Math.signum(o.signVector.x)) continue;
-			if (Math.signum(y) != Math.signum(o.signVector.y)) continue;
-			if (Math.signum(z) != Math.signum(o.signVector.z)) continue;
+			if (Math.signum(x) != Math.signum(o.signVector.x) ||
+				Math.signum(y) != Math.signum(o.signVector.y) ||
+				Math.signum(z) != Math.signum(o.signVector.z)) continue;
 			return o;
 		}
 		return null;
