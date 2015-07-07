@@ -585,12 +585,15 @@ public class Color implements Serializable {
 		float delta = maxOf(getRed(), getGreen(), getBlue()) - minOf(getRed(), getGreen(), getBlue());
 		if (Float.compare(delta, 0) == 0) return 0;
 
-		return (getLightness() > 0.5) ? delta / (2 - delta)
-									 : delta / (maxOf(getRed(),
-													  getGreen(),
-													  getBlue()) + minOf(getRed(),
-																		 getGreen(),
-																		 getBlue()));
+		if (getLightness() > 0.5) {
+			return delta / (2 - delta);
+		} else {
+			return delta / (maxOf(getRed(),
+								  getGreen(),
+								  getBlue()) + minOf(getRed(),
+													 getGreen(),
+													 getBlue()));
+		}
 	}
 
 	/**
