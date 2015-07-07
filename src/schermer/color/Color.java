@@ -484,6 +484,7 @@ public class Color implements Serializable {
 	public int getRgbHex() {
 		return srgbEncoding & ENCODING_RGB_BIT_MASK;
 	}
+	
 
 	/**
 	 * Returns the 8 bit red component of the color.
@@ -773,6 +774,15 @@ public class Color implements Serializable {
 	 */
 	public Vector3f asRgbVector() {
 		return Vector3f.rectangular(getRed(), getGreen(), getBlue());
+	}
+	
+	/**
+	 * Returns the color as an RGB array.
+	 * 
+	 * @return an array of the color components
+	 */
+	public float[] asRgbArray() {
+		return new float[] {getRed(), getGreen(), getBlue()};
 	}
 
 	/**
