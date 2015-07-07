@@ -1,4 +1,3 @@
-package schermer.color;
 /**
  * File: ColorNameSource.java
  * License: The MIT License (MIT)
@@ -23,6 +22,7 @@ package schermer.color;
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
+package schermer.color;
 
 
 import java.io.BufferedReader;
