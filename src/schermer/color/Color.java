@@ -547,7 +547,7 @@ public class Color implements Serializable {
 	 */
 	public float getHue() {
 		/* No hue for grays. */
-		if (Double.compare(getRed(), getBlue()) == 0 &&
+		if (Float.compare(getRed(), getBlue()) == 0 &&
 			Float.compare(getBlue(), getGreen()) == 0) return 0;
 
 		float res = 0;
