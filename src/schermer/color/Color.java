@@ -34,6 +34,7 @@ import java.util.function.ToDoubleBiFunction;
 import java.util.regex.Pattern;
 
 import schermer.UnreachableCodeException;
+import schermer.math.Matrix3f;
 import schermer.math.Vector3f;
 
 
@@ -85,13 +86,13 @@ import schermer.math.Vector3f;
  * {@link Color#fromCmykPercent(int, int, int, int)}: Constructs a color from
  * CMYK proportions as percents.
  * 
- * @version 0.2.1 (12 June 2015)
+ * @version 0.2.2 (8 July 2015)
  * @author Skylor R Schermer
  */
 public class Color implements Serializable {
 
 	// Constants =============================================================
-	private static final long serialVersionUID = 20L;
+	private static final long serialVersionUID = 22L;
 	/** Regex pattern string for parsers. Matches a six-digit hex code. */
 	public static final String COLOR_PATTERN = "#([0-9a-fA-F]{6})";
 
@@ -963,6 +964,16 @@ public class Color implements Serializable {
 								  (c1y - c2y) * (c1y - c2y)) / Math.sqrt(6));
 	}
 
+	/**
+	 * Returns the color produced by applying the given RGB color space transformation.
+	 * 
+	 * @param transformation the tranformation matrix
+	 * @return a new Color
+	 */
+	public Color transform(Matrix3f transformation) {
+		return Color.fromRgbVector(transformation.multiply(this.asRgbVector()));
+	}
+	
 
 	// Overridden Methods ====================================================
 	/** {@inheritDoc} */
