@@ -57,15 +57,17 @@ public class TreePrinter<N> {
 	private static final String DEFAULT_INDENT_STRING = "|   ";
 	private static final String DEFAULT_DEPTH_TRUNCATE_STRING = "...";
 
+	
 	// Fields ================================================================
 	private Function<N, String> getData;
 	private Function<N, List<N>> getChildren;
+	
+	/* Formatting data. */
 	private int maxDepth;
-
-	/* */
 	private String indentStringPrefix;
 	private String indentString;
 	private String depthTruncateString;
+	
 
 	// Constructors ==========================================================
 	/**

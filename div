@@ -46,3 +46,12 @@
  * @version 0.1.0 (2015)
  * @author Skylor R Schermer
  */
+ 
+feature 
+docs 
+chore
+fix
+refactor
+style
+test
+localize
