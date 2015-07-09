@@ -47,16 +47,25 @@ import java.util.function.Function;
  * {@link TreePrinter#of(Function, Function)}: Constructs a TreePrinter from a
  * node accessor function and a child accessor function.
  *
- * @version 0.1.0 (2015)
+ * @version 0.1.1 (9 July 2015)
  * @author Skylor R Schermer
  */
 public class TreePrinter<N> {
+
+	// Constants =============================================================
+	private static final String DEFAULT_INDENT_STRING_PREFIX = "    ";
+	private static final String DEFAULT_INDENT_STRING = "|   ";
+	private static final String DEFAULT_DEPTH_TRUNCATE_STRING = "...";
 
 	// Fields ================================================================
 	private Function<N, String> getData;
 	private Function<N, List<N>> getChildren;
 	private int maxDepth;
 
+	/* */
+	private String indentStringPrefix;
+	private String indentString;
+	private String depthTruncateString;
 
 	// Constructors ==========================================================
 	/**
@@ -69,14 +78,26 @@ public class TreePrinter<N> {
 	 *        the function for retrieving a list of child nodes
 	 * @param maxDepth
 	 *        the maximum depth of tree traversal
+	 * @param indentStringPrefix
+	 *        the display string for the start of an indentation
+	 * @param indentString
+	 *        the display string for the middle portion of an indentation
+	 * @param depthTruncateString
+	 *        the display string for truncated depth
 	 */
 	private TreePrinter(Function<N, String> getData,
 						Function<N, List<N>> getChildren,
-						int maxDepth) {
+						int maxDepth,
+						String indentStringPrefix,
+						String indentString,
+						String depthTruncateString) {
 
 		this.getData = getData;
 		this.getChildren = getChildren;
 		this.maxDepth = maxDepth;
+		this.indentStringPrefix = indentStringPrefix;
+		this.indentString = indentString;
+		this.depthTruncateString = depthTruncateString;
 	}
 
 
@@ -93,7 +114,12 @@ public class TreePrinter<N> {
 	public static <N> TreePrinter<N> of(Function<N, String> getData,
 										Function<N, List<N>> getChildren) {
 
-		return new TreePrinter<N>(getData, getChildren, -1);
+		return new TreePrinter<N>(getData,
+								  getChildren,
+								  -1,
+								  DEFAULT_INDENT_STRING_PREFIX,
+								  DEFAULT_INDENT_STRING,
+								  DEFAULT_DEPTH_TRUNCATE_STRING);
 	}
 
 
@@ -106,6 +132,36 @@ public class TreePrinter<N> {
 	 */
 	public void setMaxDepth(int maxDepth) {
 		this.maxDepth = maxDepth;
+	}
+
+	/**
+	 * Sets the indentation prefix string.
+	 * 
+	 * @param indentStringPrefix
+	 *        the indentation prefix string
+	 */
+	public void setIndentStringPrefix(String indentStringPrefix) {
+		this.indentStringPrefix = indentStringPrefix;
+	}
+
+	/**
+	 * Sets the indentation string.
+	 * 
+	 * @param indentString
+	 *        the indentation string
+	 */
+	public void setIndentString(String indentString) {
+		this.indentString = indentString;
+	}
+
+	/**
+	 * Sets the depth truncation string.
+	 * 
+	 * @param depthTruncateString
+	 *        the depth truncation string
+	 */
+	public void setDepthTruncateString(String depthTruncateString) {
+		this.depthTruncateString = depthTruncateString;
 	}
 
 	/**
@@ -139,12 +195,15 @@ public class TreePrinter<N> {
 
 
 		for (N child : getChildren.apply(node)) {
-			sb.append('\n');
 			if (maxDepth != -1 && depth + 1 >= maxDepth) {
-				sb.append(indent(depth + 1));
-				sb.append("...");
+				if (depthTruncateString != null) {
+					sb.append('\n');
+					sb.append(indent(depth + 1));
+					sb.append(depthTruncateString);
+				}
 				break;
 			} else {
+				sb.append('\n');
 				sb.append(getPrintStringRecursive(child, depth + 1));
 			}
 		}
@@ -163,9 +222,11 @@ public class TreePrinter<N> {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < depth; i++) {
 			if (i == 0) {
-				sb.append("    ");
+				if (indentStringPrefix != null)
+					sb.append(indentStringPrefix);
 			} else {
-				sb.append("|   ");
+				if (indentString != null)
+					sb.append(indentString);
 			}
 		}
 		return sb.toString();
