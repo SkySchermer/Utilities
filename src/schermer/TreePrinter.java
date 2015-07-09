@@ -59,7 +59,7 @@ public class TreePrinter<N> {
 
 	
 	// Fields ================================================================
-	private Function<N, String> getData;
+	private Function<N, String> getNodeString;
 	private Function<N, List<N>> getChildren;
 	
 	/* Formatting data. */
@@ -73,7 +73,7 @@ public class TreePrinter<N> {
 	/**
 	 * Constructs a TreePrinter from its total internal state.
 	 * 
-	 * @param getData
+	 * @param getNodeString
 	 *        the function for retrieving a string representation for a single
 	 *        node
 	 * @param getChildren
@@ -87,14 +87,14 @@ public class TreePrinter<N> {
 	 * @param depthTruncateString
 	 *        the display string for truncated depth
 	 */
-	private TreePrinter(Function<N, String> getData,
+	private TreePrinter(Function<N, String> getNodeString,
 						Function<N, List<N>> getChildren,
 						int maxDepth,
 						String indentStringPrefix,
 						String indentString,
 						String depthTruncateString) {
 
-		this.getData = getData;
+		this.getNodeString = getNodeString;
 		this.getChildren = getChildren;
 		this.maxDepth = maxDepth;
 		this.indentStringPrefix = indentStringPrefix;
@@ -107,16 +107,16 @@ public class TreePrinter<N> {
 	/**
 	 * Constructs a TreePrinter from node accessor functions.
 	 * 
-	 * @param getData
+	 * @param getNodeString
 	 *        the function for retrieving a string representation for a single
 	 *        node
 	 * @param getChildren
 	 *        the function for retrieving a list of child nodes
 	 */
-	public static <N> TreePrinter<N> of(Function<N, String> getData,
+	public static <N> TreePrinter<N> of(Function<N, String> getNodeString,
 										Function<N, List<N>> getChildren) {
 
-		return new TreePrinter<N>(getData,
+		return new TreePrinter<N>(getNodeString,
 								  getChildren,
 								  -1,
 								  DEFAULT_INDENT_STRING_PREFIX,
@@ -192,9 +192,7 @@ public class TreePrinter<N> {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(indent(depth));
-
-		sb.append(getData.apply(node));
-
+		sb.append(getNodeString.apply(node));
 
 		for (N child : getChildren.apply(node)) {
 			if (maxDepth != -1 && depth + 1 >= maxDepth) {
