@@ -130,7 +130,7 @@ public class Color implements Serializable {
 																	 0, 	  0.7154f, 0,
 																	 0, 	  0,	   0.0721f);
 	// @formatter:on
-
+	
 	/** {@link Comparator} function for sorting colors. */
 	public static final Comparator<Color> COLOR_COMPARATOR = new Comparator<Color>() {
 		@Override
