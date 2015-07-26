@@ -586,9 +586,9 @@ public class Color implements Serializable {
 
 		// @formatter:off
 		switch (indexOfMax(getRed(), getGreen(), getBlue())) {
-			case 0: res = ((getGreen()-getBlue())/delta) % 6; break;
-			case 1: res = ((getBlue()-getRed())/delta) + 2; break;
-			case 2: res = ((getRed()-getGreen())/delta) + 4; break;
+			case 0: res = ((getGreen() - getBlue() ) / delta) % 6; break;
+			case 1: res = ((getBlue()  - getRed()  ) / delta) + 2; break;
+			case 2: res = ((getRed()   - getGreen()) / delta) + 4; break;
 			default: throw new UnreachableCodeException();
 		}
 		// @formatter:on
