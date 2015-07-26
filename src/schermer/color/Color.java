@@ -125,9 +125,11 @@ public class Color implements Serializable {
 	 * Standard SRGB gamma correction matrix for use with
 	 * {@link Color#transform(Matrix3f)}.
 	 */
-	public static final Matrix3f SRGB_GAMMA_CORRECTION = Matrix3f.of(0.2125f, 0, 0,
-																	 0, 0.7154f, 0,
-																	 0, 0, 0.0721f);
+	// @formatter:off
+	public static final Matrix3f SRGB_GAMMA_CORRECTION = Matrix3f.of(0.2125f, 0, 	   0,
+																	 0, 	  0.7154f, 0,
+																	 0, 	  0,	   0.0721f);
+	// @formatter:on
 
 	/** {@link Comparator} function for sorting colors. */
 	public static final Comparator<Color> COLOR_COMPARATOR = new Comparator<Color>() {
