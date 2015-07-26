@@ -6,7 +6,7 @@ Various java utility classes and common libraries.
 Color
 -----
 
-# Color
+### Color
 The `Color` class provides a number of useful color manipulating functions, namely a large suite of flexable constructors and component manipulators. This allows ease of use when working with colors in multiple representations: RGB, CMYK, HSL, and HSV. It also provides some interaperablility with `java.awt.Color` and `Vector3f` (see below.)
 
 ```java
@@ -18,11 +18,11 @@ System.out.println(cns.getNearestColorName(c)); // prints "FRENCH LIME"
 System.out.println(cns.getNearestColor(c)); // prints "#9EFD38"
 ```
 
-# Color Sorting
+### Color Sorting
 
 `Color` also provides limited sorting capability in the form of `Color.COLOR_COMPARATOR`, which will sort colors by lightness, saturation, and hue. Due to the fact that colors are normally unordered, this will result in some 'banding' that makes it hard to relate colors that are dissimilar. This is mostly useful for displaying a large number of colors consistently in a palette.
 
-# Transform
+### Transform
 
 Colors can also be created using arbitrary matrix transformations. For instance, 
 one could make a transformation that mixes the red and blue channels by doing this:
@@ -42,7 +42,7 @@ System.out.println(c) // prints "#032512" (~Dark Green)
 ```
 
 
-# ColorNameSource
+### ColorNameSource
 The `ColorNameSource` class allows you to generate and find colors based on strings. This is useful for shortcutting color creation:
 
 ```java
