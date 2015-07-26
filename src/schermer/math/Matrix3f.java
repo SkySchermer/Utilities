@@ -1,5 +1,5 @@
 /**
- * File: Matrix4f.java
+ * File: Matrix3f.java
  * License: The MIT License (MIT)
  *  
  *  Copyright (c) 2015 Skylor R. Schermer
