@@ -100,12 +100,12 @@ public class Color implements Serializable {
 	private static final int COMPONENT_BIT_MASK = 0xFF;
 
 	private static final int ENCODING_RED_OFFSET = 16;
-	private static final int ENCODING_BLUE_OFFSET = 8;
-	private static final int ENCODING_GREEN_OFFSET = 0;
+	private static final int ENCODING_GREEN_OFFSET = 8;
+	private static final int ENCODING_BLUE_OFFSET = 0;
 
 	private static final int ENCODING_RED_BIT_MASK = COMPONENT_BIT_MASK << ENCODING_RED_OFFSET;
-	private static final int ENCODING_BLUE_BIT_MASK = COMPONENT_BIT_MASK << ENCODING_BLUE_OFFSET;
 	private static final int ENCODING_GREEN_BIT_MASK = COMPONENT_BIT_MASK << ENCODING_GREEN_OFFSET;
+	private static final int ENCODING_BLUE_BIT_MASK = COMPONENT_BIT_MASK << ENCODING_BLUE_OFFSET;
 	private static final int ENCODING_RGB_BIT_MASK = ENCODING_RED_BIT_MASK |
 													 ENCODING_GREEN_BIT_MASK |
 													 ENCODING_BLUE_BIT_MASK;

@@ -117,7 +117,7 @@ public class ColorNameSource {
 
 		/* Build CoverTree. */
 		cns.colorCoverTree = CoverTree.of(cns.colorNames.values(), (cn1, cn2) -> {
-			return cn1.color.hslDistanceTo(cn2.color);
+			return cn1.color.rgbDistanceTo(cn2.color);
 		});
 		
 		return cns;
@@ -179,13 +179,19 @@ public class ColorNameSource {
 			this.name = name;
 			this.color = color;
 		}
+		
+		public String toString() {
+			return color.toString() + "-" + this.name; 
+		}
 	}
 	
 	public static void main(String[] args) {
 		ColorNameSource cns = ColorNameSource.fromFile("colornames.txt");
-		System.out.println(cns.getColor("yellow"));
-		System.out.println(cns.getNearestColorName(Color.fromRgbHex(0xB68900)));
-		System.out.println(cns.getNearestColor(Color.fromRgbHex(0xB68900)));
+//		System.out.println(cns.getColor("Fuchsia"));
+//		System.out.println(cns.getNearestColorName(Color.fromRgbHex(0x3F0FFF)));
+//		System.out.println(cns.getNearestColor(Color.fromRgbHex(0x3F0FFF)));
+		
+		cns.colorCoverTree.debugPrint();
 	}
 	
 //
