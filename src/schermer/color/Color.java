@@ -31,6 +31,7 @@ import static schermer.Utility.minOf;
 
 import java.io.Serializable;
 import java.util.function.ToDoubleBiFunction;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import schermer.UnreachableCodeException;
@@ -152,8 +153,7 @@ public class Color implements Serializable {
 	 */
 	public static Color named(String name) {
 		if (colorNameSource == null) colorNameSource = ColorNameSource.fromFile(colorNameFile);
-		Integer hex = colorNameSource.getColorHex(name);
-		return (hex != null ? Color.fromRgbHex(hex) : null);
+		return colorNameSource.getColor(name);
 	}
 
 	/**
@@ -178,8 +178,12 @@ public class Color implements Serializable {
 	 * @return a new Color
 	 */
 	public static Color parseRgbHex(String hexString) {
-		Pattern p = Pattern.compile(Color.COLOR_PATTERN, Pattern.CASE_INSENSITIVE);
-		return Color.fromRgbHex(Integer.parseInt(p.matcher(hexString).group(1), 16));
+		Matcher m = Pattern.compile(COLOR_PATTERN, Pattern.CASE_INSENSITIVE)
+						   .matcher(hexString);
+		if (m.matches()) {
+			return Color.fromRgbHex(Integer.parseInt(m.group(1), 16));
+		}
+		throw new IllegalArgumentException("Unkown RGB hex format.");
 	}
 
 	/**
