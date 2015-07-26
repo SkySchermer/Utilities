@@ -46,7 +46,6 @@ import schermer.math.Vector3f;
  * <p>
  * <b> Constructors: </b>
  * <p>
- * <p>
  * {@link Color#named(String)}: Constructs a color by looking up the given name
  * in a color database.
  * <p>
@@ -89,7 +88,7 @@ import schermer.math.Vector3f;
  * {@link Color#fromCmykPercent(int, int, int, int)}: Constructs a color from
  * CMYK proportions as percents.
  * 
- * @version 0.2.2 (8 July 2015)
+ * @version 0.2.3 (26 July 2015)
  * @author Skylor R Schermer
  */
 public class Color implements Serializable {
