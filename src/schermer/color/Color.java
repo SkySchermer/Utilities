@@ -88,7 +88,7 @@ import schermer.math.Vector3f;
  * {@link Color#fromCmykPercent(int, int, int, int)}: Constructs a color from
  * CMYK proportions as percents.
  * 
- * @version 0.2.3 (26 July 2015)
+ * @version 0.2.4 (26 July 2015)
  * @author Skylor R Schermer
  */
 public class Color implements Serializable {
@@ -113,7 +113,7 @@ public class Color implements Serializable {
 
 	/** Function for computing the distance between two colors in RGB space. */
 	public static final ToDoubleBiFunction<Color, Color> RGB_DISTANCE_FUNCTION = (a, b) -> {
-		return a.hslDistanceTo(b);
+		return a.rgbDistanceTo(b);
 	};
 
 	/** Function for computing the distance between two colors in HSL space. */
