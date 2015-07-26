@@ -30,6 +30,8 @@ import static schermer.Utility.maxOf;
 import static schermer.Utility.minOf;
 
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.function.BiPredicate;
 import java.util.function.ToDoubleBiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,6 +122,43 @@ public class Color implements Serializable {
 		return a.hslDistanceTo(b);
 	};
 
+	/**
+	 * Standard SRGB gamma correction matrix for use with
+	 * {@link Color#transform(Matrix3f)}.
+	 */
+	public static final Matrix3f SRGB_GAMMA_CORRECTION = Matrix3f.of(0.2125f, 0, 0,
+																	 0, 0.7154f, 0,
+																	 0, 0, 0.0721f);
+
+	/** {@link Comparator} function for sorting colors. */
+	public static final Comparator<Color> COLOR_COMPARATOR = new Comparator<Color>() {
+		@Override
+		public int compare(Color c1, Color c2) {
+			final double CUT = 0.05;
+			BiPredicate<Double, Double> close = (x1, x2) -> {
+				return (x1 - (x1 % CUT)) == (x2 - (x2 % CUT));
+			};
+
+			c1 = c1.transform(SRGB_GAMMA_CORRECTION);
+			c2 = c2.transform(SRGB_GAMMA_CORRECTION);
+
+			double lc1 = c1.getLightness();
+			double lc2 = c2.getLightness();
+
+			if (close.test(lc1, lc2)) {
+				double sc1 = c1.getHslSaturation();
+				double sc2 = c2.getHslSaturation();
+				double hc1 = c1.getHue();
+				double hc2 = c2.getHue();
+
+				if (close.test(hc1, hc2))
+					return Double.compare(sc1, sc2);
+				return Double.compare(hc1, hc2);
+			}
+			return Double.compare(lc1, lc2);
+		}
+	};
+
 	// Static Fields =========================================================
 	private static ColorNameSource colorNameSource = null;
 	private static String colorNameFile = ColorNameSource.DEFAULT_COLOR_NAME_FILE;
@@ -152,7 +191,8 @@ public class Color implements Serializable {
 	 *         named color is not present.
 	 */
 	public static Color named(String name) {
-		if (colorNameSource == null) colorNameSource = ColorNameSource.fromFile(colorNameFile);
+		if (colorNameSource == null)
+			colorNameSource = ColorNameSource.fromFile(colorNameFile);
 		return colorNameSource.getColor(name);
 	}
 
@@ -180,9 +220,7 @@ public class Color implements Serializable {
 	public static Color parseRgbHex(String hexString) {
 		Matcher m = Pattern.compile(COLOR_PATTERN, Pattern.CASE_INSENSITIVE)
 						   .matcher(hexString);
-		if (m.matches()) {
-			return Color.fromRgbHex(Integer.parseInt(m.group(1), 16));
-		}
+		if (m.matches()) { return Color.fromRgbHex(Integer.parseInt(m.group(1), 16)); }
 		throw new IllegalArgumentException("Unkown RGB hex format.");
 	}
 
@@ -223,8 +261,7 @@ public class Color implements Serializable {
 
 	/**
 	 * Constructs a color from RGB proportions. The input values are clamped to
-	 * the
-	 * range 0-1.
+	 * the range 0-1.
 	 * 
 	 * @param red
 	 *        the red component of the color
@@ -247,8 +284,7 @@ public class Color implements Serializable {
 
 	/**
 	 * Constructs a color from RGB percentages. The input values are clamped to
-	 * the
-	 * range 0-100.
+	 * the range 0-100.
 	 * 
 	 * @param red
 	 *        the red component of the color
@@ -284,8 +320,7 @@ public class Color implements Serializable {
 
 	/**
 	 * Constructs a color from HSV proportions. The saturation and key values
-	 * are
-	 * clamped to the range 0-1.
+	 * are clamped to the range 0-1.
 	 * 
 	 * @param hue
 	 *        the hue angle of the color
@@ -318,8 +353,7 @@ public class Color implements Serializable {
 
 	/**
 	 * Constructs a color from HSV percentages. The saturation and key values
-	 * are
-	 * clamped to the range 0-100.
+	 * are clamped to the range 0-100.
 	 * 
 	 * @param hue
 	 *        the hue angle of the color
@@ -338,8 +372,7 @@ public class Color implements Serializable {
 
 	/**
 	 * Constructs a color from HSL proportions. The saturation and lightness
-	 * values
-	 * are clamped to the range 0-1.
+	 * values are clamped to the range 0-1.
 	 * 
 	 * @param hue
 	 *        the hue angle of the color
@@ -373,8 +406,7 @@ public class Color implements Serializable {
 
 	/**
 	 * Constructs a color from HSL percentages. The saturation and lightness
-	 * values
-	 * are clamped to the range 0-100.
+	 * values are clamped to the range 0-100.
 	 * 
 	 * @param hue
 	 *        the hue angle of the color
@@ -422,8 +454,7 @@ public class Color implements Serializable {
 
 	/**
 	 * Constructs a color from CMYK percentages. The inpput values are clamped
-	 * to
-	 * the range 0-100.
+	 * to the range 0-100.
 	 * 
 	 * @param cyan
 	 *        the cyan component of the color
@@ -546,7 +577,8 @@ public class Color implements Serializable {
 	public float getHue() {
 		/* No hue for grays. */
 		if (Float.compare(getRed(), getBlue()) == 0 &&
-			Float.compare(getBlue(), getGreen()) == 0) return 0;
+			Float.compare(getBlue(), getGreen()) == 0)
+			return 0;
 
 		float res = 0;
 		float delta = maxOf(getRed(), getGreen(), getBlue()) - minOf(getRed(), getGreen(), getBlue());
@@ -569,7 +601,8 @@ public class Color implements Serializable {
 	 */
 	public float getHsvSaturation() {
 		float delta = maxOf(getRed(), getGreen(), getBlue()) - minOf(getRed(), getGreen(), getBlue());
-		if (Float.compare(delta, 0) == 0) return 0;
+		if (Float.compare(delta, 0) == 0)
+			return 0;
 
 		return delta / getValue();
 	}
@@ -581,7 +614,8 @@ public class Color implements Serializable {
 	 */
 	public float getHslSaturation() {
 		float delta = maxOf(getRed(), getGreen(), getBlue()) - minOf(getRed(), getGreen(), getBlue());
-		if (Float.compare(delta, 0) == 0) return 0;
+		if (Float.compare(delta, 0) == 0)
+			return 0;
 
 		if (getLightness() > 0.5) {
 			return delta / (2 - delta);
@@ -872,7 +906,8 @@ public class Color implements Serializable {
 	 * @return a reduced copy of the color
 	 */
 	public Color reduce(float precision) {
-		if (precision <= 0) return this;
+		if (precision <= 0)
+			return this;
 		return Color.fromRgb((getRed() + precision / 2) - getRed() % precision,
 							 (getGreen() + precision / 2) - getGreen() % precision,
 							 (getBlue() + precision / 2) - getBlue() % precision);
@@ -898,7 +933,8 @@ public class Color implements Serializable {
 	 * @return a copy of the color with the given channel component dropped
 	 */
 	public Color dropChannel(Channel channel) {
-		if (channel == null) return this;
+		if (channel == null)
+			return this;
 		// @formatter:off
 		switch (channel) {
 			case RED:     return Color.fromRgb(0, getGreen(), getBlue());
@@ -923,7 +959,8 @@ public class Color implements Serializable {
 	 *         dropped
 	 */
 	public Color isolateChannel(Channel channel) {
-		if (channel == null) return Color.fromRgb(0, 0, 0);
+		if (channel == null)
+			return Color.fromRgb(0, 0, 0);
 		// @formatter:off
 		switch (channel) {
 			case RED:     return Color.fromRgb(getRed(), 0, 		 0);
@@ -969,15 +1006,17 @@ public class Color implements Serializable {
 	}
 
 	/**
-	 * Returns the color produced by applying the given RGB color space transformation.
+	 * Returns the color produced by applying the given RGB color space
+	 * transformation.
 	 * 
-	 * @param transformation the tranformation matrix
+	 * @param transformation
+	 *        the tranformation matrix
 	 * @return a new Color
 	 */
 	public Color transform(Matrix3f transformation) {
 		return Color.fromRgbVector(transformation.multiply(this.asRgbVector()));
 	}
-	
+
 
 	// Overridden Methods ====================================================
 	/** {@inheritDoc} */
@@ -995,9 +1034,12 @@ public class Color implements Serializable {
 	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null) return false;
-		if (getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		if (getClass() != o.getClass())
+			return false;
 		Color color = (Color) o;
 		return srgbEncoding == color.srgbEncoding;
 	}
