@@ -76,7 +76,7 @@ public class ColorNameSource {
 	private static final String COLOR_NAME_REGEX = "(#[0-9a-fA-F]{6}) (.*)";
 	private static final String COLOR_NAME_FORMAT = "#%06X %s";
 
-	private static final ToDoubleBiFunction<Color, Color> DEFAULT_COLOR_METRIC = Color.RGB_DISTANCE_FUNCTION;
+	private static final ToDoubleBiFunction<Color, Color> DEFAULT_COLOR_METRIC = Color.HSL_DISTANCE_FUNCTION;
 
 
 	// Fields ================================================================
@@ -250,5 +250,15 @@ public class ColorNameSource {
 		public String toString() {
 			return color.toString() + "-" + this.name;
 		}
+	}
+	
+	public static void main(String[] args) {
+		ColorNameSource cns = ColorNameSource.fromFile(DEFAULT_COLOR_NAME_FILE, Color.RGB_DISTANCE_FUNCTION);
+		
+		Color c = Color.fromRgbHex(0x1134FF).transform(Color.SRGB_GAMMA_CORRECTION);
+		System.out.println(c);
+		System.out.println(cns.getNearestColorName(c));
+		System.out.println(cns.getNearestColor(c));
+		
 	}
 }

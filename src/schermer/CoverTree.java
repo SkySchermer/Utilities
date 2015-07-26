@@ -37,7 +37,7 @@ public class CoverTree<T> {
 
 
 	// Fields ================================================================
-	ToDoubleBiFunction<T, T> distanceFunction;
+	ToDoubleBiFunction<T, T> metricFunction;
 	CoverTreeNode<T> root;
 	double maxDistance;
 
@@ -48,20 +48,22 @@ public class CoverTree<T> {
 					  int minLevel,
 					  int maxLevel) {
 		this.root = root;
-		this.distanceFunction = distanceFunction;
+		this.metricFunction = distanceFunction;
 	}
 
+	
 	// Static Constructors ===================================================
 	public static <T> CoverTree<T> of(Collection<T> data,
-									  ToDoubleBiFunction<T, T> distanceFunction) {
+									  ToDoubleBiFunction<T, T> metricFunction) {
 
-		CoverTree<T> tree = new CoverTree<>(null, distanceFunction, 0, 1);
+		CoverTree<T> tree = new CoverTree<>(null, metricFunction, 0, 1);
 		for (T item : data) {
 			tree.insert(item);
 		}
 
 		return tree;
 	}
+	
 
 	// Methods ===============================================================
 	public T findNearest(T point) {
@@ -162,7 +164,7 @@ public class CoverTree<T> {
 
 
 	private double distance(T a, T b) {
-		return distanceFunction.applyAsDouble(a, b);
+		return metricFunction.applyAsDouble(a, b);
 	}
 
 
