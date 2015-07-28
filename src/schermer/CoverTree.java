@@ -158,11 +158,125 @@ public class CoverTree<T> {
 		return node;
 	}
 
-	public void remove(T point, List<List<T>> coverSets, int level) {
-
+	private void insertNearestAncestor(T point) {
+		
+	}
+	private void insertNearestAncestor() {
+		/* Pseudocode from paper:
+		 * Nearest ancestor cover tree insertion 
+		 * 
+		 * function insert (cover tree p, data point x)
+		 * 
+		 *   for q ∈ children(p) sorted by distance to x do 
+		 *   	if d(q,x) ≤ covdist(q) then
+		 *   		q′ ← insert (q, x)
+		 *   		p′ ← p with child q replaced with q′ 
+		 *   		return p′
+		 *   return rebalance( p, x)
+		 */
+	}
+	
+	private void rebalance() {
+		/* Pseudocode from paper:
+		 * 
+		 * function rebalance(cover trees p, data point x)
+		 * prerequisites: x can be added as a child of p without violating the covering or separating invariants
+		 * 
+		 * 	create tree x′ with root node x at level level(p) − 1 x′ contains no other points
+		 * 	p′ ← p
+		 * 	for q ∈ children(p) do
+		 * 		(q′, moveset, stayset) ← rebalance_(p,q,x) 
+		 * 		p′ ← p′ with child q replaced with q′
+		 * 		for r ∈ moveset do
+		 * 			x′ ← insert(x′,r) 
+		 * 	return p′ with x′ added as a child
+		 */
+	}
+	
+	private void rebalanceRecursive() {
+		/* Pseudocode from paper:
+		 * 
+		 * function rebalance (cover trees p and q, point x) 
+		 * prerequisites: p is an ancestor of q
+		 * 
+		 * 	if d(p,q) > d(q,x) then 
+		 * 		moveset, stayset ← 0
+		 * 		for r ∈ descendants(q) do
+		 * 			if d(r, p) > d(r,x) then 
+		 * 				moveset ← moveset ∪ {r}
+		 * 			else
+		 * 				stayset ← stayset ∪ {r}
+		 * 		return (null, moveset, stayset) 
+		 * 	else
+		 * 		moveset′,stayset′ ← 0
+		 * 		q′ ← q
+		 * 		for r ∈ children(q) do
+		 * 			(r′, moveset, stayset) ← rebalance_(p,r,x) 
+		 * 			moveset′ ← moveset ∪ moveset′
+		 * 			stayset′ ← stayset ∪ stayset′
+		 * 			if r′ = null then
+		 * 				q′ ← q with the subtree r removed 
+		 * 			else
+		 * 				q′ ← q with the subtree r replaced by r′
+		 * 		for r ∈ stayset′ do
+		 * 			if d(r,q)′ ≤ covdist(q)′ then
+		 * 				q′ ← insert(q′,r) stayset′ ← stayset′ − {r}
+		 * 		return (q′,moveset′,stayset′)
+		 * 
+		 */
+	}
+	
+	private void merge() {
+		/* Pseudocode from paper:
+		 * 
+		 * function merge(cover tree p, cover tree q)
+		 * 	if level(q) > level(p) then 
+		 * 		swap p and q
+		 * 	while level(q) < level(p) do
+		 * 		move a node from the leaf of q to the root; this raises the level of q by 1
+		 * 		(p,leftovers) ← mergeHelper(p,q) 
+		 * 	for r ∈ leftovers do
+		 * 		p ← insert(p,r) 
+		 * 	return p
+		 * 
+		 */
 	}
 
-
+	private void mergeHelper() {
+		/* Pseudocode from paper:
+		 * 
+		 * function mergeHelper(cover tree p, cover tree q) 
+		 * prereqs: level(p) = level(q), d(p,q) ≤ covdist(p)
+		 * 
+		 * 	children′ ← children(p) 			//◃ Phase 1
+		 * 	uncovered, sepcov, leftovers ← 0 
+		 * 	for r ∈ children(q) do
+		 * 		if d(p,r) < covdist(p) then 
+		 * 			foundmatch ← false
+		 * 			for s ∈ children′ do
+		 * 				if d(s, r) ≤ sepdist(p) then 
+		 * 					(s′, leftovers_s) ← mergeHelper(s,r) 
+		 * 					children′ ← children′ ∪ {s′ } − {s} 
+		 * 					leftovers ← leftovers ∪ leftoverss 
+		 * 					foundmatch ← true
+		 * 					break from inner loop
+		 * 			if not foundmatch then 
+		 * 				sepcov ← sepcov ∪ {r}
+		 * 		else
+		 * 			uncovered ← uncovered ∪ {r} 
+		 * 	children′ ← children′ ∪ sepcov	//◃ Phase 2
+		 * 	p′ ← tree rooted at p with children(p’) = children′
+		 * 	p′ ← insert(p′,q) 
+		 * 	leftovers′ ← 0 
+		 * 	for r ∈ leftovers do
+		 * 		if d(r, p)′ ≤ covdist(p)′ then 
+		 * 			p′ ← insert(p′,r)
+		 * 		else
+		 * 			leftovers′ ← leftovers′ ∪ {r} 
+		 * 	return (p′, leftovers′ ∪ uncovered)
+		 */
+	}
+	
 	private double distance(T a, T b) {
 		return metricFunction.applyAsDouble(a, b);
 	}
@@ -172,6 +286,8 @@ public class CoverTree<T> {
 		return maxDistance;
 	}
 
+	
+	// Internal Classes ======================================================
 	private static class CoverTreeNode<P> {
 
 		public List<CoverTreeNode<P>> children;

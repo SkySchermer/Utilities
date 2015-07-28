@@ -175,7 +175,7 @@ public class ColorNameSource {
 		ColorNameSource cns = new ColorNameSource(new TreeMap<>(),
 												  null,
 												  colorMetric);
-		
+
 		cns.colorCoverTree = CoverTree.of(Collections.emptyList(), (cn1, cn2) -> {
 			return cns.colorMetric.applyAsDouble(cn1.color, cn2.color);
 		});
@@ -223,6 +223,14 @@ public class ColorNameSource {
 		return null;
 	}
 
+	/**
+	 * Returns the nearest color to the given color that exists in the
+	 * ColorNameSource data.
+	 * 
+	 * @param color
+	 *        the color to find a match for
+	 * @return the nearest color
+	 */
 	public Color getNearestColor(Color color) {
 		NamedColor cn = colorCoverTree.findNearest(new NamedColor(null, color));
 		if (cn != null)
@@ -230,6 +238,14 @@ public class ColorNameSource {
 		return null;
 	}
 
+	/**
+	 * Returns the name of the nearest color to the given color that exists in
+	 * the ColorNameSource data.
+	 * 
+	 * @param color
+	 *        the color to find a match for
+	 * @return the name of the nearest color
+	 */
 	public String getNearestColorName(Color color) {
 		NamedColor cn = colorCoverTree.findNearest(new NamedColor(null, color));
 		if (cn != null)
@@ -237,7 +253,11 @@ public class ColorNameSource {
 		return null;
 	}
 
-
+	
+	// Internal Classes ======================================================
+	/**
+	 * Represents a name/Color pair.
+	 */
 	private static class NamedColor {
 		public String name;
 		public Color color;
@@ -251,14 +271,14 @@ public class ColorNameSource {
 			return color.toString() + "-" + this.name;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		ColorNameSource cns = ColorNameSource.fromFile(DEFAULT_COLOR_NAME_FILE, Color.RGB_DISTANCE_FUNCTION);
-		
+
 		Color c = Color.fromRgbHex(0x1134FF).transform(Color.SRGB_GAMMA_CORRECTION);
 		System.out.println(c);
 		System.out.println(cns.getNearestColorName(c));
 		System.out.println(cns.getNearestColor(c));
-		
+
 	}
 }
